@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import "./App.css";
-import Person from "./Person/Person";
-import TextValidate from "./Validation/Validation";
-import Char from "./Char/Char";
-import Reacthook from "./reacthook/React-hook";
+import classes from "./App.module.css";
+import Persons from "../components/Persons/Persons";
+import TextValidate from "../components/Validation/Validation";
+import Char from "../components/Char/Char";
+import Reacthook from "../components/reacthook/React-hook";
+import Cockpit from "../components/Cockpit/Cockpit";
 // import Radium, { StyleRoot } from "radium";
 // import styled from "styled-components";
 
@@ -21,6 +22,23 @@ import Reacthook from "./reacthook/React-hook";
 //   },`;
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    console.log("[App.js] Constructor");
+    //[[[this is the set state in older version of reactjs]]]
+    // this.state = {
+    //   persons: [
+    //     { id: "sada", name: "Sơn2", age: 28 },
+    //     { id: "sadasda", name: "Duy2", age: 27 },
+    //     { id: "sadafasd", name: "Tùng2", age: 26 },
+    //   ],
+    //   otherState: "some other value",
+    //   showPerson: false,
+    //   text: "",
+    // };
+  }
+
+  //this is the setstate in newer version of react in which you dont need to call constructor
   state = {
     persons: [
       { id: "sada", name: "Sơn2", age: 28 },
@@ -90,17 +108,11 @@ class App extends Component {
     if (this.state.showPerson) {
       persons = (
         <div>
-          {this.state.persons.map((person, index) => {
-            return (
-              <Person
-                click={() => this.deletePersonHandler(index)}
-                name={person.name}
-                age={person.age}
-                key={person.id}
-                changed={(event) => this.nameChangeHandler(event, person.id)}
-              ></Person>
-            );
-          })}
+          <Persons
+            persons={this.state.persons}
+            clicked={this.deletePersonHandler}
+            changed={this.nameChangeHandler}
+          ></Persons>
         </div>
       );
 
@@ -148,22 +160,14 @@ class App extends Component {
       </div>
     );
 
-    const classes = [];
-    if (this.state.persons.length < 3) {
-      classes.push("red"); //classes = ['red']
-    }
-    if (this.state.persons.length < 2) {
-      classes.push("bold");
-    }
-
     return (
       // <StyleRoot>
-      <div className="App">
-        <h1>Hi, this is my first app</h1>
-        <p className={classes.join(" ")}>This is JSX</p>
-        <button className="Button" onClick={() => this.togglePersonHandler()}>
-          Switch showPerson
-        </button>
+      <div className={classes.App}>
+        <Cockpit
+          showPerson={this.state.showPerson}
+          persons={this.state.persons}
+          clicked={() => this.togglePersonHandler()}
+        />
         {persons}
         {text}
 
